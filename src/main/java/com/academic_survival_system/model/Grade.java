@@ -1,14 +1,15 @@
 package com.academic_survival_system.model;
-
-
-
+import com.academic_survival_system.model.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(
         name = "grades",
@@ -19,9 +20,6 @@ import java.math.BigDecimal;
                 )
         }
 )
-@Getter
-@Setter
-@NoArgsConstructor
 public class Grade {
 
     @Id
@@ -41,7 +39,4 @@ public class Grade {
 
     @Column(name = "letter_grade", length = 2)
     private String letterGrade;
-
-    @Column(name = "grade_points", precision = 3, scale = 2)
-    private BigDecimal gradePoints;
 }

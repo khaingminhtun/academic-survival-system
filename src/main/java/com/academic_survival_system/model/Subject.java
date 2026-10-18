@@ -2,36 +2,26 @@ package com.academic_survival_system.model;
 
 
 
+
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity
-@Table(
-        name = "subjects",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "uk_subject_code",
-                        columnNames = "subject_code"
-                )
-        }
-)
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
+@Table(name = "subjects")
 public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "subject_code", nullable = false, length = 20)
+    @Column(name = "subject_code", nullable = false, unique = true)
     private String subjectCode;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String name;
-
-    @Column(name = "credit_hours", nullable = false)
-    private Integer creditHours;
 }
