@@ -1,19 +1,27 @@
 package com.academic_survival_system.service;
 
-import com.academic_survival_system.dto.SubjectRequest;
-import com.academic_survival_system.dto.SubjectResponse;
+
+import com.academic_survival_system.dto.request.SubjectRequest;
+import com.academic_survival_system.dto.response.SubjectResponse;
 
 import java.util.List;
 
 public interface SubjectService {
 
-    SubjectResponse create(SubjectRequest request);
+    SubjectResponse createSubject(
+            Long semesterId,
+            SubjectRequest request
+    );
 
-    List<SubjectResponse> findAll();
+    List<SubjectResponse> getSubjects(Long semesterId);
 
-    SubjectResponse findById(Long id);
+    SubjectResponse getSubjectById(Long semesterId, Long subjectId);
 
-    SubjectResponse update(Long id, SubjectRequest request);
+    SubjectResponse updateSubject(
+            Long semesterId,
+            Long subjectId,
+            SubjectRequest request
+    );
 
-    void delete(Long id);
+    void deleteSubject(Long semesterId, Long subjectId);
 }

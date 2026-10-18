@@ -1,42 +1,34 @@
 package com.academic_survival_system.model;
 
-
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.math.BigDecimal;
+import lombok.*;
 
 @Entity
 @Table(
-        name = "marks",
+        name = "risk_subjects",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_marks_student_subject",
-                        columnNames = {"student_id", "subject_id"}
+                        name = "uk_result_risk_subject",
+                        columnNames = {"academic_result_id", "subject_id"}
                 )
         }
 )
 @Getter
 @Setter
 @NoArgsConstructor
-public class Mark {
+@AllArgsConstructor
+@Builder
+public class RiskSubject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    @JoinColumn(name = "academic_result_id", nullable = false)
+    private AcademicResult academicResult;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
-
-    @Column(name = "mark", nullable = false, precision = 5, scale = 2)
-    private BigDecimal mark;
 }
-

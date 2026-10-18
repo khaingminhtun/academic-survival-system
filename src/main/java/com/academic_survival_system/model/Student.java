@@ -1,16 +1,19 @@
-
 package com.academic_survival_system.model;
 
+
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "students")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Student {
 
     @Id
@@ -23,6 +26,11 @@ public class Student {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false)
+    private String department;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Semester> semesters = new ArrayList<>();
 }
+

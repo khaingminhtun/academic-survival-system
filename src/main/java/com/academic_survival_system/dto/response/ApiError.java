@@ -1,10 +1,9 @@
-package com.academic_survival_system.dto;
-
+package com.academic_survival_system.dto.response;
 
 
 import java.time.LocalDateTime;
 
-import java.time.LocalDateTime;
+
 import java.util.Map;
 
 public record ApiError(

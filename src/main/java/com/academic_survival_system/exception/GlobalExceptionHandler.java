@@ -2,7 +2,7 @@ package com.academic_survival_system.exception;
 
 
 
-import com.academic_survival_system.dto.ApiError;
+import com.academic_survival_system.dto.response.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

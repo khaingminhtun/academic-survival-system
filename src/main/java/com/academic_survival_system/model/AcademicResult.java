@@ -1,18 +1,21 @@
 package com.academic_survival_system.model;
 
+
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "academic_results")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AcademicResult {
 
     @Id
@@ -20,19 +23,33 @@ public class AcademicResult {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    @JoinColumn(name = "semester_id", nullable = false)
+    private Semester semester;
 
-    @Column(name = "average_mark", precision = 5, scale = 2)
+    @Column(
+            name = "average_mark",
+            nullable = false,
+            precision = 5,
+            scale = 2
+    )
     private BigDecimal averageMark;
 
-    @Column(length = 10)
+    @Column(nullable = false)
     private String grade;
 
-    @Column(name = "risk_level", length = 20)
-    private String riskLevel;
+    @Column(name = "feedback", nullable = false, columnDefinition = "TEXT")
+    private String feedback;
 
-    @Column(name = "calculated_at")
+    @Column(name = "calculated_at", nullable = false)
     private LocalDateTime calculatedAt;
+
+    @OneToMany(
+            mappedBy = "academicResult",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<RiskSubject> RiskSubjects = new ArrayList<>();
 }
+
 

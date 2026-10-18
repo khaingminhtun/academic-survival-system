@@ -1,19 +1,21 @@
 package com.academic_survival_system.service;
 
-import com.academic_survival_system.dto.StudentRequest;
-import com.academic_survival_system.dto.StudentResponse;
+import com.academic_survival_system.dto.request.StudentRequest;
+import com.academic_survival_system.dto.response.StudentResponse;
 
 import java.util.List;
 
 public interface StudentService {
 
-    StudentResponse create(StudentRequest request);
+    StudentResponse createStudent(StudentRequest request);
 
-    List<StudentResponse> findAll();
+    List<StudentResponse> getAllStudents();
 
-    StudentResponse findById(Long id);
+    StudentResponse getStudentById(Long id);
 
-    StudentResponse update(Long id, StudentRequest request);
+    StudentResponse updateStudent(Long id, StudentRequest request);
 
-    void delete(Long id);
+    void deleteStudent(Long id);
+
+
 }
