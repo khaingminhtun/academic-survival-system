@@ -1,5 +1,7 @@
 package com.academic_survival_system.model;
-import com.academic_survival_system.model.Student;
+
+
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,20 +9,20 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
 @Table(
-        name = "grades",
+        name = "marks",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_grade_student_subject",
+                        name = "uk_marks_student_subject",
                         columnNames = {"student_id", "subject_id"}
                 )
         }
 )
-public class Grade {
+@Getter
+@Setter
+@NoArgsConstructor
+public class Mark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +36,7 @@ public class Grade {
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
 
-    @Column(nullable = false, precision = 5, scale = 2)
-    private BigDecimal marks;
-
-    @Column(name = "letter_grade", length = 2)
-    private String letterGrade;
+    @Column(name = "mark", nullable = false, precision = 5, scale = 2)
+    private BigDecimal mark;
 }
+

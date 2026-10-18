@@ -1,18 +1,15 @@
 package com.academic_survival_system.model;
 
-
-
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "subjects")
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-@Table(name = "subjects")
 public class Subject {
 
     @Id
@@ -22,6 +19,7 @@ public class Subject {
     @Column(name = "subject_code", nullable = false, unique = true)
     private String subjectCode;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "subject_name", nullable = false)
+    private String subjectName;
 }
+

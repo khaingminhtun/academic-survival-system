@@ -3,6 +3,8 @@ package com.academic_survival_system.dto;
 
 
 import java.time.LocalDateTime;
+
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public record ApiError(
@@ -12,4 +14,5 @@ public record ApiError(
         String message,
         String path,
         Map<String, String> validationErrors
-) {}
+) {
+}

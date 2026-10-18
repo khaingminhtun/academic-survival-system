@@ -1,10 +1,10 @@
 package com.academic_survival_system.dto;
 
 
-
 public record StudentResponse(
         Long id,
-        String studentNumber,
+        String studentId,
         String fullName,
         String email
-) {}
+) {
+}

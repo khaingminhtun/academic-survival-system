@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface StudentService {
 
-    StudentResponse createStudent(StudentRequest request);
+    StudentResponse create(StudentRequest request);
 
-    List<StudentResponse> getAllStudents();
+    List<StudentResponse> findAll();
 
-    StudentResponse getStudentById(Long id);
+    StudentResponse findById(Long id);
 
-    StudentResponse updateStudent(Long id, StudentRequest request);
+    StudentResponse update(Long id, StudentRequest request);
 
-    void deleteStudent(Long id);
+    void delete(Long id);
 }

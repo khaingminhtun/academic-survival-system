@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface SubjectService {
 
-    SubjectResponse createSubject(SubjectRequest request);
+    SubjectResponse create(SubjectRequest request);
 
-    List<SubjectResponse> getAllSubjects();
+    List<SubjectResponse> findAll();
 
-    SubjectResponse getSubjectById(Long id);
+    SubjectResponse findById(Long id);
 
-    SubjectResponse updateSubject(Long id, SubjectRequest request);
+    SubjectResponse update(Long id, SubjectRequest request);
 
-    void deleteSubject(Long id);
+    void delete(Long id);
 }
