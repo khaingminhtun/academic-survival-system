@@ -13,7 +13,7 @@ public interface SubjectService {
             SubjectRequest request
     );
 
-    List<SubjectResponse> getSubjects(Long semesterId);
+    List<SubjectResponse> getAllSubjects(Long semesterId);
 
     SubjectResponse getSubjectById(Long semesterId, Long subjectId);
 
