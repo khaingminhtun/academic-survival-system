@@ -49,7 +49,7 @@ public class AcademicResult {
             orphanRemoval = true
     )
     @Builder.Default
-    private List<RiskSubject> RiskSubjects = new ArrayList<>();
+    private List<RiskSubject> riskSubjects = new ArrayList<>();
 }
 
 

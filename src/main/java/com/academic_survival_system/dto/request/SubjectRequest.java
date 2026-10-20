@@ -1,10 +1,7 @@
 package com.academic_survival_system.dto.request;
 
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
@@ -18,6 +15,7 @@ public record SubjectRequest(
         @Size(max = 100, message = "Subject name must not exceed 100 characters")
         String subjectName,
 
+        @NotNull(message = "Mark is required")
         @DecimalMin(value = "0.0", message = "Mark cannot be below 0")
         @DecimalMax(value = "100.0", message = "Mark cannot exceed 100")
         BigDecimal mark

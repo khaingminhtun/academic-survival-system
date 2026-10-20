@@ -21,5 +21,7 @@ public interface AcademicResultService {
             String academicYear
     );
 
+    List<AcademicResultResponse> getStudentResults(Long studentId);
+
     List<RiskSubjectResponse> getRiskSubjects(Long resultId);
 }
