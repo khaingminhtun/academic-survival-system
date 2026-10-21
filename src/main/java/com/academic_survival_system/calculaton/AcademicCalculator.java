@@ -54,9 +54,7 @@ if (average.compareTo(new BigDecimal("80")) >= 0) {
     }
 
     public String checkAcademicRisk(BigDecimal average) {
-        if (average == null) {
-    throw new IllegalArgumentException("Average cannot be null");
-}
+        ValidateMark(average);
 
 if (average.compareTo(new BigDecimal("40")) < 0) {
     return "HIGH";
