@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 
 public record SubjectRequest(
 
+        @Positive(message = "Subject ID must be positive")
+        Long subjectId,
+
         @NotBlank(message = "Subject code is required")
         @Size(max = 30, message = "Subject code must not exceed 30 characters")
         String subjectCode,

@@ -1,10 +1,13 @@
 package com.academic_survival_system.service.impl;
 
+import com.academic_survival_system.calculaton.AcademicCalculator;
 import com.academic_survival_system.dto.response.AcademicResultResponse;
 import com.academic_survival_system.dto.response.RiskSubjectResponse;
 import com.academic_survival_system.exception.ResourceNotFoundException;
 import com.academic_survival_system.model.AcademicResult;
 import com.academic_survival_system.model.RiskSubject;
+import com.academic_survival_system.model.Semester;
+import com.academic_survival_system.model.Subject;
 import com.academic_survival_system.repository.AcademicResultRepository;
 import com.academic_survival_system.repository.SemesterRepository;
 import com.academic_survival_system.service.AcademicResultService;
@@ -12,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,16 +27,66 @@ public class AcademicResultServiceImpl implements AcademicResultService {
 
     private final AcademicResultRepository academicResultRepository;
     private final SemesterRepository semesterRepository;
+    private final AcademicCalculator academicCalculator;
 
 
     @Override
     public AcademicResultResponse calculateResult(Long semesterId) {
-        // TODO: Integrate Member 1's calculation logic.
-        // Load the semester and subjects, calculate the report,
-        // save a new AcademicResult and its RiskSubject records.
-        throw new UnsupportedOperationException(
-                "Calculation integration is not implemented yet."
-        );
+
+        Semester semester = semesterRepository.findById(semesterId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Semester not found with ID: " + semesterId
+                ));
+
+        List<Subject> subjects = semester.getSubjects();
+
+        List<BigDecimal> marks = subjects.stream()
+                .map(Subject::getMark)
+                .toList();
+
+        BigDecimal average =
+                academicCalculator.calculateAverage(marks);
+
+        String grade =
+                academicCalculator.calculateGrade(average);
+
+        String riskLevel =
+                academicCalculator.checkAcademicRisk(average);
+
+        String feedback =
+                academicCalculator.generateFeedback(
+                        average,
+                        grade,
+                        riskLevel
+                );
+
+        AcademicResult result = AcademicResult.builder()
+                .semester(semester)
+                .averageMark(average)
+                .grade(grade)
+                .feedback(feedback)
+                .calculatedAt(LocalDateTime.now())
+                .build();
+
+        List<RiskSubject> riskSubjects = subjects.stream()
+                .filter(subject ->
+                        academicCalculator.checkAcademicRisk(
+                                subject.getMark()
+                        ).equals("HIGH")
+                )
+                .map(subject -> RiskSubject.builder()
+                        .academicResult(result)
+                        .subject(subject)
+                        .build()
+                )
+                .toList();
+
+        result.setRiskSubjects(new ArrayList<>(riskSubjects));
+
+        AcademicResult savedResult =
+                academicResultRepository.save(result);
+
+        return toResponse(savedResult);
 
 
     }

@@ -1,9 +1,13 @@
 package com.academic_survival_system.calculaton;
 
 
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
+@Component
 public class AcademicCalculator {
 
     
@@ -72,7 +76,7 @@ if (average.compareTo(new BigDecimal("40")) < 0) {
             String grade,
             String riskLevel
     ) {
-        if (average == null  grade == null  riskLevel == null) {
+        if (average == null || grade == null || riskLevel == null) {
     throw new IllegalArgumentException(
         "Average, grade, and risk level cannot be null"
     );
