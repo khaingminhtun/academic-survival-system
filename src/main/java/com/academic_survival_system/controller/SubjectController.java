@@ -23,16 +23,16 @@ public class SubjectController {
 
     // Reference implementation
     @PostMapping
-    public ResponseEntity<SubjectResponse> createSubject(
+    public ResponseEntity<List<SubjectResponse>> createSubjects(
             @PathVariable Long semesterId,
-            @Valid @RequestBody SubjectRequest request) {
+            @Valid @RequestBody List<@Valid SubjectRequest> requests) {
 
-        SubjectResponse response =
-                subjectService.createSubject(semesterId, request);
+        List<SubjectResponse> responses =
+                subjectService.createSubjects(semesterId, requests);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(response);
+                .body(responses);
     }
 
     // TODO: GET /api/v1/semesters/{semesterId}/subjects
@@ -67,6 +67,19 @@ public class SubjectController {
         return ResponseEntity.ok(
                 subjectService.updateSubject(
                         semesterId, subjectId, request
+                )
+        );
+    }
+
+    @PutMapping("/bulk")
+    public ResponseEntity<List<SubjectResponse>> updateSubjects(
+            @PathVariable Long semesterId,
+            @Valid @RequestBody List<@Valid SubjectRequest> requests
+    ) {
+        return ResponseEntity.ok(
+                subjectService.updateSubjects(
+                        semesterId,
+                        requests
                 )
         );
     }

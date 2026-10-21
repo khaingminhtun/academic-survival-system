@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface SubjectService {
 
-    SubjectResponse createSubject(
+    List<SubjectResponse> createSubjects(
             Long semesterId,
-            SubjectRequest request
+            List<SubjectRequest> requests
     );
 
     List<SubjectResponse> getAllSubjects(Long semesterId);
@@ -22,6 +22,8 @@ public interface SubjectService {
             Long subjectId,
             SubjectRequest request
     );
+
+    List<SubjectResponse> updateSubjects(Long semesterId,List<SubjectRequest> requests);
 
     void deleteSubject(Long semesterId, Long subjectId);
 }
