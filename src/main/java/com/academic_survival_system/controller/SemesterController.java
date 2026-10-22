@@ -21,7 +21,6 @@ public class SemesterController {
 
     private final SemesterService semesterService;
 
-    // Reference implementation
     @PostMapping
     public ResponseEntity<SemesterResponse> createSemester(
             @PathVariable Long studentId,
@@ -35,10 +34,53 @@ public class SemesterController {
                 .body(response);
     }
 
-    // TODO: GET /api/v1/students/{studentId}/semesters
+    //  GET /api/v1/students/{studentId}/semesters
+    @GetMapping
+    public ResponseEntity<List<SemesterResponse>> getSemesters(
+            @PathVariable Long studentId,
+            @RequestParam(required = false) String academicYear) {
+
+        List<SemesterResponse> response =
+                semesterService.getSemesters(studentId, academicYear);
+
+        return ResponseEntity.ok(response);
+    }
     // Include optional @RequestParam academicYear for filtering.
-    // TODO: GET /api/v1/students/{studentId}/semesters/{semesterId}
-    // TODO: PUT /api/v1/students/{studentId}/semesters/{semesterId}
-    // TODO: DELETE /api/v1/students/{studentId}/semesters/{semesterId}
+    //  GET /api/v1/students/{studentId}/semesters/{semesterId}
+    @GetMapping("/{semesterId}")
+    public ResponseEntity<SemesterResponse> getSemesterById(
+            @PathVariable Long studentId,
+            @PathVariable Long semesterId) {
+
+        SemesterResponse response =
+                semesterService.getSemesterById(studentId, semesterId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    //PUT /api/v1/students/{studentId}/semesters/{semesterId}
+    @PutMapping("/{semesterId}")
+    public ResponseEntity<SemesterResponse> updateSemester(
+            @PathVariable Long studentId,
+            @PathVariable Long semesterId,
+            @Valid @RequestBody SemesterRequest request) {
+
+        SemesterResponse response =
+                semesterService.updateSemester(
+                        studentId, semesterId, request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // DELETE /api/v1/students/{studentId}/semesters/{semesterId}
+    @DeleteMapping("/{semesterId}")
+    public ResponseEntity<Void> deleteSemester(
+            @PathVariable Long studentId,
+            @PathVariable Long semesterId) {
+
+        semesterService.deleteSemester(studentId, semesterId);
+
+        return ResponseEntity.noContent().build();
+    }
 }
 
