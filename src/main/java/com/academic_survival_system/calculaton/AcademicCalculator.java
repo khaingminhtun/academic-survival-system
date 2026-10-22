@@ -58,7 +58,7 @@ if (average.compareTo(new BigDecimal("80")) >= 0) {
     }
 
     public String checkAcademicRisk(BigDecimal average) {
-        ValidateMark(average);
+        validateMark(average);
 
 if (average.compareTo(new BigDecimal("40")) < 0) {
     return "HIGH";
