@@ -16,10 +16,7 @@ public interface AcademicResultService {
 
     AcademicResultResponse getResultById(Long resultId);
 
-    List<AcademicResultResponse> getStudentResults(
-            Long studentId,
-            String academicYear
-    );
+
 
     List<AcademicResultResponse> getStudentResults(Long studentId);
 

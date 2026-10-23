@@ -96,13 +96,13 @@ export default function SubjectsPage() {
     <div className="space-y-5">
       <PageHeader
         title="Subjects"
-        subtitle={semester ? `${semester.semesterName} · AY ${semester.academicYear}${student ? ` · ${student.fullName}` : ''}` : `Semester ${semesterId}`}
+        subtitle={semester ? `Year ${semester.yearLevel} · Sem ${semester.semesterNumber}${student ? ` · ${student.fullName}` : ''}` : `Semester ${semesterId}`}
         breadcrumb={
           <Breadcrumb
             crumbs={[
               { label: 'Students', to: '/students' },
               ...(student ? [{ label: student.fullName, to: `/students/${student.id}` }] : []),
-              ...(semester && student ? [{ label: semester.semesterName, to: `/students/${student.id}/semesters/${semester.id}` }] : []),
+              ...(semester && student ? [{ label: `Year ${semester.yearLevel} · Sem ${semester.semesterNumber}`, to: `/students/${student.id}/semesters/${semester.id}` }] : []),
               { label: 'Subjects' },
             ]}
           />

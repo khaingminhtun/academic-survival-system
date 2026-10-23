@@ -103,8 +103,8 @@ export default function StudentDetailPage() {
                   className="flex items-center justify-between px-5 py-3.5 hover:bg-slate-50 transition-colors"
                 >
                   <div>
-                    <p className="text-sm font-medium text-slate-900">{sem.semesterName}</p>
-                    <p className="text-xs text-slate-500">AY {sem.academicYear}</p>
+                    <p className="text-sm font-medium text-slate-900">Year {sem.yearLevel} · Semester {sem.semesterNumber}</p>
+                    <p className="text-xs text-slate-500">Year Level {sem.yearLevel}</p>
                   </div>
                   <svg className="w-4 h-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />

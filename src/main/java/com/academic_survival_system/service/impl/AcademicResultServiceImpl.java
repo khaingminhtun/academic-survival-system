@@ -126,17 +126,7 @@ public class AcademicResultServiceImpl implements AcademicResultService {
         return toResponse(result);
     }
 
-    @Override
-    public List<AcademicResultResponse> getStudentResults(Long studentId, String academicYear) {
-        return academicResultRepository
-                .findAllBySemester_Student_IdAndSemester_AcademicYearOrderByCalculatedAtDesc(
-                        studentId,
-                        academicYear
-                )
-                .stream()
-                .map(this::toResponse)
-                .toList();
-    }
+
 
     @Override
     public List<AcademicResultResponse> getStudentResults(Long studentId) {

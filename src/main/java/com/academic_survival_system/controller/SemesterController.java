@@ -1,6 +1,5 @@
 package com.academic_survival_system.controller;
 
-
 import com.academic_survival_system.dto.request.SemesterRequest;
 import com.academic_survival_system.dto.response.SemesterResponse;
 import com.academic_survival_system.service.SemesterService;
@@ -21,6 +20,7 @@ public class SemesterController {
 
     private final SemesterService semesterService;
 
+    // POST /api/v1/students/{studentId}/semesters
     @PostMapping
     public ResponseEntity<SemesterResponse> createSemester(
             @PathVariable Long studentId,
@@ -34,19 +34,20 @@ public class SemesterController {
                 .body(response);
     }
 
-    //  GET /api/v1/students/{studentId}/semesters
+    // GET /api/v1/students/{studentId}/semesters
+    // Optional filter: ?yearLevel=1
     @GetMapping
     public ResponseEntity<List<SemesterResponse>> getSemesters(
             @PathVariable Long studentId,
-            @RequestParam(required = false) String academicYear) {
+            @RequestParam(required = false) Integer yearLevel) {
 
         List<SemesterResponse> response =
-                semesterService.getSemesters(studentId, academicYear);
+                semesterService.getSemesters(studentId, yearLevel);
 
         return ResponseEntity.ok(response);
     }
-    // Include optional @RequestParam academicYear for filtering.
-    //  GET /api/v1/students/{studentId}/semesters/{semesterId}
+
+    // GET /api/v1/students/{studentId}/semesters/{semesterId}
     @GetMapping("/{semesterId}")
     public ResponseEntity<SemesterResponse> getSemesterById(
             @PathVariable Long studentId,
@@ -58,7 +59,7 @@ public class SemesterController {
         return ResponseEntity.ok(response);
     }
 
-    //PUT /api/v1/students/{studentId}/semesters/{semesterId}
+    // PUT /api/v1/students/{studentId}/semesters/{semesterId}
     @PutMapping("/{semesterId}")
     public ResponseEntity<SemesterResponse> updateSemester(
             @PathVariable Long studentId,
@@ -83,4 +84,3 @@ public class SemesterController {
         return ResponseEntity.noContent().build();
     }
 }
-

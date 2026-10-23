@@ -78,8 +78,8 @@ export const studentsApi = {
 import type { SemesterRequest, SemesterResponse } from '../types/api';
 
 export const semestersApi = {
-  getAll(studentId: number, academicYear?: string): Promise<SemesterResponse[]> {
-    const params = academicYear ? `?academicYear=${encodeURIComponent(academicYear)}` : '';
+  getAll(studentId: number, yearLevel?: number): Promise<SemesterResponse[]> {
+    const params = yearLevel != null ? `?yearLevel=${yearLevel}` : '';
     return fetch(url(`/students/${studentId}/semesters${params}`)).then(
       handleResponse<SemesterResponse[]>
     );

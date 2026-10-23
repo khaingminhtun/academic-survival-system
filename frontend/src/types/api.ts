@@ -18,13 +18,13 @@ export interface StudentRequest {
 export interface SemesterResponse {
   id: number;
   studentId: number;
-  semesterName: string;
-  academicYear: string;
+  yearLevel: number;      // 1–6
+  semesterNumber: number; // 1 or 2
 }
 
 export interface SemesterRequest {
-  semesterName: string;
-  academicYear: string;
+  yearLevel: number;      // 1–6
+  semesterNumber: number; // 1 or 2
 }
 
 // ── Subject ──────────────────────────────────────────────────────────────

@@ -1,7 +1,8 @@
 package com.academic_survival_system.model;
 
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -12,11 +13,11 @@ import java.util.List;
         name = "semesters",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_student_semester_year",
+                        name = "uk_student_year_semester",
                         columnNames = {
                                 "student_id",
-                                "semester_name",
-                                "academic_year"
+                                "year_level",
+                                "semester_number"
                         }
                 )
         }
@@ -36,11 +37,15 @@ public class Semester {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @Column(name = "semester_name", nullable = false)
-    private String semesterName;
+    @Column(name = "year_level", nullable = false)
+    @Min(1)
+    @Max(6)
+    private Integer yearLevel;
 
-    @Column(name = "academic_year", nullable = false)
-    private String academicYear;
+    @Column(name = "semester_number", nullable = false)
+    @Min(1)
+    @Max(2)
+    private Integer semesterNumber;
 
     @OneToMany(
             mappedBy = "semester",

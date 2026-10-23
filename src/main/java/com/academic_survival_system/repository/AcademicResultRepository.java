@@ -19,11 +19,7 @@ public interface AcademicResultRepository extends JpaRepository<AcademicResult, 
     List<AcademicResult>
     findAllBySemester_IdOrderByCalculatedAtDesc(Long semesterId);
 
-    List<AcademicResult>
-    findAllBySemester_Student_IdAndSemester_AcademicYearOrderByCalculatedAtDesc(
-            Long studentId,
-            String academicYear
-    );
+
 
     List<AcademicResult> findAllBySemester_Student_IdOrderByCalculatedAtDesc(Long studentId);
 }

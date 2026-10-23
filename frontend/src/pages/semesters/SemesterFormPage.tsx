@@ -6,7 +6,6 @@ import PageHeader from '../../components/ui/PageHeader';
 import Breadcrumb from '../../components/ui/Breadcrumb';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import { FormField } from '../../components/ui/FormField';
 import ErrorAlert from '../../components/ui/ErrorAlert';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
@@ -14,10 +13,10 @@ type FieldErrors = Partial<Record<keyof SemesterRequest, string>>;
 
 function validate(form: SemesterRequest): FieldErrors {
   const errs: FieldErrors = {};
-  if (!form.semesterName.trim()) errs.semesterName = 'Semester name is required';
-  else if (form.semesterName.length > 50) errs.semesterName = 'Must not exceed 50 characters';
-  if (!form.academicYear.trim()) errs.academicYear = 'Academic year is required';
-  else if (form.academicYear.length > 20) errs.academicYear = 'Must not exceed 20 characters';
+  if (!form.yearLevel || form.yearLevel < 1 || form.yearLevel > 6)
+    errs.yearLevel = 'Year level must be between 1 and 6';
+  if (!form.semesterNumber || (form.semesterNumber !== 1 && form.semesterNumber !== 2))
+    errs.semesterNumber = 'Semester number must be 1 or 2';
   return errs;
 }
 
@@ -28,7 +27,7 @@ export default function SemesterFormPage() {
   const sid = Number(studentId);
 
   const [student, setStudent] = useState<StudentResponse | null>(null);
-  const [form, setForm] = useState<SemesterRequest>({ semesterName: '', academicYear: '' });
+  const [form, setForm] = useState<SemesterRequest>({ yearLevel: 1, semesterNumber: 1 });
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [serverError, setServerError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,7 +38,7 @@ export default function SemesterFormPage() {
     if (isEdit) {
       tasks.push(
         semestersApi.getById(sid, Number(semesterId)).then((s) =>
-          setForm({ semesterName: s.semesterName, academicYear: s.academicYear })
+          setForm({ yearLevel: s.yearLevel, semesterNumber: s.semesterNumber })
         )
       );
     }
@@ -48,10 +47,11 @@ export default function SemesterFormPage() {
       .finally(() => setLoading(false));
   }, [studentId, semesterId, isEdit, sid]);
 
-  const handleChange = (field: keyof SemesterRequest) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
-    if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
-  };
+  const handleSelectChange =
+    (field: keyof SemesterRequest) => (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setForm((prev) => ({ ...prev, [field]: Number(e.target.value) }));
+      if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,28 +103,50 @@ export default function SemesterFormPage() {
 
       <Card>
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
-          <FormField
-            id="field-semester-name"
-            label="Semester Name"
-            required
-            value={form.semesterName}
-            onChange={handleChange('semesterName')}
-            error={fieldErrors.semesterName}
-            placeholder="e.g. Semester 1"
-            maxLength={50}
-            disabled={submitting}
-          />
-          <FormField
-            id="field-academic-year"
-            label="Academic Year"
-            required
-            value={form.academicYear}
-            onChange={handleChange('academicYear')}
-            error={fieldErrors.academicYear}
-            placeholder="e.g. 2024-2025"
-            maxLength={20}
-            disabled={submitting}
-          />
+
+          {/* Year Level */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="field-year-level" className="text-sm font-medium text-slate-700">
+              Year Level <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="field-year-level"
+              value={form.yearLevel}
+              onChange={handleSelectChange('yearLevel')}
+              disabled={submitting}
+              className={`rounded-md border px-3 py-2 text-sm bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${fieldErrors.yearLevel ? 'border-red-400' : 'border-slate-300'
+                }`}
+            >
+              {[1, 2, 3, 4, 5, 6].map((y) => (
+                <option key={y} value={y}>Year {y}</option>
+              ))}
+            </select>
+            {fieldErrors.yearLevel && (
+              <p className="text-xs text-red-600">{fieldErrors.yearLevel}</p>
+            )}
+          </div>
+
+          {/* Semester Number */}
+          <div className="flex flex-col gap-1">
+            <label htmlFor="field-semester-number" className="text-sm font-medium text-slate-700">
+              Semester Number <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="field-semester-number"
+              value={form.semesterNumber}
+              onChange={handleSelectChange('semesterNumber')}
+              disabled={submitting}
+              className={`rounded-md border px-3 py-2 text-sm bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${fieldErrors.semesterNumber ? 'border-red-400' : 'border-slate-300'
+                }`}
+            >
+              <option value={1}>Semester 1</option>
+              <option value={2}>Semester 2</option>
+            </select>
+            {fieldErrors.semesterNumber && (
+              <p className="text-xs text-red-600">{fieldErrors.semesterNumber}</p>
+            )}
+          </div>
+
           <div className="flex justify-end gap-3 pt-2">
             <Link to={isEdit ? `/students/${studentId}/semesters/${semesterId}` : `/students/${studentId}/semesters`}>
               <Button variant="secondary" type="button" disabled={submitting}>Cancel</Button>
@@ -138,3 +160,4 @@ export default function SemesterFormPage() {
     </div>
   );
 }
+

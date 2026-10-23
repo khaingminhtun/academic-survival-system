@@ -16,7 +16,7 @@ export default function SemestersPage() {
   const { studentId } = useParams<{ studentId: string }>();
   const [student, setStudent] = useState<StudentResponse | null>(null);
   const [semesters, setSemesters] = useState<SemesterResponse[]>([]);
-  const [yearFilter, setYearFilter] = useState('');
+  const [yearFilter, setYearFilter] = useState<number | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -30,7 +30,7 @@ export default function SemestersPage() {
     setError(null);
     Promise.all([
       studentsApi.getById(sid),
-      semestersApi.getAll(sid, yearFilter || undefined),
+      semestersApi.getAll(sid, yearFilter),
     ])
       .then(([s, sems]) => { setStudent(s); setSemesters(sems); })
       .catch((e: Error) => setError(e.message))
@@ -45,7 +45,7 @@ export default function SemestersPage() {
     try {
       await semestersApi.delete(sid, deleteTarget.id);
       setSemesters((prev) => prev.filter((s) => s.id !== deleteTarget.id));
-      setSuccessMsg(`Semester "${deleteTarget.semesterName}" deleted.`);
+      setSuccessMsg(`Semester "Year ${deleteTarget.yearLevel} · Sem ${deleteTarget.semesterNumber}" deleted.`);
       setDeleteTarget(null);
     } catch (e) {
       if (e instanceof ApiRequestError) setError(e.message);
@@ -54,7 +54,7 @@ export default function SemestersPage() {
     }
   };
 
-  const uniqueYears = [...new Set(semesters.map((s) => s.academicYear))].sort();
+  const uniqueYearLevels = [...new Set(semesters.map((s) => s.yearLevel))].sort((a, b) => a - b);
 
   return (
     <div className="space-y-5">
@@ -79,22 +79,22 @@ export default function SemestersPage() {
 
       {successMsg && <SuccessAlert message={successMsg} onDismiss={() => setSuccessMsg(null)} />}
 
-      {/* Year filter */}
-      {uniqueYears.length > 1 && (
+      {/* Year level filter */}
+      {uniqueYearLevels.length > 1 && (
         <div className="flex items-center gap-2 flex-wrap">
           <button
-            onClick={() => setYearFilter('')}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${!yearFilter ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+            onClick={() => setYearFilter(undefined)}
+            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${yearFilter == null ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
           >
             All
           </button>
-          {uniqueYears.map((y) => (
+          {uniqueYearLevels.map((y) => (
             <button
               key={y}
               onClick={() => setYearFilter(y)}
               className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${yearFilter === y ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
             >
-              {y}
+              Year {y}
             </button>
           ))}
         </div>
@@ -120,11 +120,11 @@ export default function SemestersPage() {
               <Card key={sem.id} className="hover:border-blue-200 hover:shadow-md transition-all">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">{sem.semesterName}</p>
-                    <p className="text-xs text-slate-500 mt-0.5">AY {sem.academicYear}</p>
+                    <p className="text-sm font-semibold text-slate-900">Year {sem.yearLevel} · Semester {sem.semesterNumber}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">Year Level {sem.yearLevel}</p>
                   </div>
                   <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">
-                    ID {sem.id}
+                    Sem {sem.semesterNumber}
                   </span>
                 </div>
                 <div className="mt-4 flex gap-2">
@@ -154,7 +154,7 @@ export default function SemestersPage() {
         open={!!deleteTarget}
         danger
         title="Delete Semester"
-        message={`Delete "${deleteTarget?.semesterName} (AY ${deleteTarget?.academicYear})"? All subjects and results will be removed.`}
+        message={`Delete "Year ${deleteTarget?.yearLevel} · Semester ${deleteTarget?.semesterNumber}"? All subjects and results will be removed.`}
         confirmLabel="Delete"
         loading={deleting}
         onConfirm={handleDelete}

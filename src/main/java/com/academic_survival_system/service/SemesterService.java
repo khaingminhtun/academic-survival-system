@@ -15,7 +15,7 @@ public interface SemesterService {
 
     List<SemesterResponse> getSemesters(
             Long studentId,
-            String academicYear
+            Integer yearLevel
     );
 
     SemesterResponse getSemesterById(
@@ -30,4 +30,5 @@ public interface SemesterService {
     );
 
     void deleteSemester(Long studentId, Long semesterId);
+
 }
