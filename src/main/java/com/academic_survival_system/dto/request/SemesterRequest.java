@@ -1,17 +1,19 @@
 package com.academic_survival_system.dto.request;
 
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public record SemesterRequest(
 
-        @NotBlank(message = "Semester name is required")
-        @Size(max = 50, message = "Semester name must not exceed 50 characters")
-        String semesterName,
+        @NotNull(message = "Year level is required")
+        @Min(value = 1, message = "Year level must be at least 1")
+        @Max(value = 6, message = "Year level must not exceed 6")
+        Integer yearLevel,
 
-        @NotBlank(message = "Academic year is required")
-        @Size(max = 20, message = "Academic year must not exceed 20 characters")
-        String academicYear
+        @NotNull(message = "Semester number is required")
+        @Min(value = 1, message = "Semester number must be 1 or 2")
+        @Max(value = 2, message = "Semester number must be 1 or 2")
+        Integer semesterNumber
 
 ) {}

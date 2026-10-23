@@ -12,6 +12,7 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 // Backend requires at least 5 subjects when creating new ones
 const MIN_SUBJECTS = 5;
+const MAX_SUBJECTS = 20;
 
 interface SubjectRow {
   subjectCode: string;
@@ -52,6 +53,25 @@ export default function SubjectFormPage() {
   const [submitting, setSubmitting] = useState(false);
   // 'idle' | 'saving' | 'calculating'
   const [calcStep, setCalcStep] = useState<'idle' | 'saving' | 'calculating'>('idle');
+
+  // Step 1: ask how many subjects before showing the form
+  const [step, setStep] = useState<'count' | 'form'>(isEdit ? 'form' : 'count');
+  const [subjectCount, setSubjectCount] = useState<string>(String(MIN_SUBJECTS));
+  const [countError, setCountError] = useState<string | null>(null);
+
+  const handleCountConfirm = () => {
+    const n = parseInt(subjectCount, 10);
+    if (isNaN(n) || n < MIN_SUBJECTS) {
+      setCountError(`Please enter at least ${MIN_SUBJECTS} subjects.`);
+      return;
+    }
+    if (n > MAX_SUBJECTS) {
+      setCountError(`Maximum ${MAX_SUBJECTS} subjects allowed.`);
+      return;
+    }
+    setRows(Array.from({ length: n }, emptyRow));
+    setStep('form');
+  };
 
   useEffect(() => {
     const tasks: Promise<unknown>[] = [
@@ -144,17 +164,91 @@ export default function SubjectFormPage() {
     ? `/students/${student.id}/semesters/${semester.id}`
     : `/semesters/${semesterId}/subjects`;
 
+  const semLabel = semester ? `Year ${semester.yearLevel} · Sem ${semester.semesterNumber}` : undefined;
+
+  // ── Step 1: subject count screen (create mode only) ─────────────────────
+  if (step === 'count') {
+    return (
+      <div className="space-y-5 max-w-md">
+        <PageHeader
+          title="Add Subjects"
+          subtitle="Tell us how many subjects you have this semester"
+          breadcrumb={
+            <Breadcrumb
+              crumbs={[
+                { label: 'Students', to: '/students' },
+                ...(student ? [{ label: student.fullName, to: `/students/${student.id}` }] : []),
+                ...(semester && student ? [{ label: semLabel!, to: `/students/${student.id}/semesters/${semester.id}` }] : []),
+                { label: 'Subjects', to: `/semesters/${semesterId}/subjects` },
+                { label: 'Add' },
+              ]}
+            />
+          }
+        />
+
+        <Card>
+          <div className="space-y-5">
+            <div className="flex items-center gap-3 p-4 rounded-lg bg-blue-50 border border-blue-100">
+              <svg className="w-5 h-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-sm text-blue-700">
+                You need <strong>at least {MIN_SUBJECTS} subjects</strong> to calculate your academic result.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label htmlFor="field-subject-count" className="text-sm font-medium text-slate-700">
+                How many subjects do you have? <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="field-subject-count"
+                type="number"
+                min={MIN_SUBJECTS}
+                max={MAX_SUBJECTS}
+                value={subjectCount}
+                onChange={(e) => { setSubjectCount(e.target.value); setCountError(null); }}
+                onKeyDown={(e) => e.key === 'Enter' && handleCountConfirm()}
+                className={`rounded-md border px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+                  countError ? 'border-red-400 bg-red-50' : 'border-slate-300'
+                }`}
+                placeholder={`Min ${MIN_SUBJECTS}, max ${MAX_SUBJECTS}`}
+                autoFocus
+              />
+              {countError && <p className="text-xs text-red-600">{countError}</p>}
+              <p className="text-xs text-slate-400">Enter a number between {MIN_SUBJECTS} and {MAX_SUBJECTS}.</p>
+            </div>
+
+            <div className="flex justify-end gap-3">
+              <Link to={backPath}>
+                <Button variant="secondary" type="button">Cancel</Button>
+              </Link>
+              <Button onClick={handleCountConfirm}>
+                Continue →
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // ── Step 2: subject input form ───────────────────────────────────────────
   return (
     <div className="space-y-5 max-w-4xl">
       <PageHeader
         title={isEdit ? 'Edit Subject' : 'Add Subjects'}
-        subtitle={isEdit ? undefined : `Minimum ${MIN_SUBJECTS} subjects required`}
+        subtitle={
+          isEdit
+            ? undefined
+            : `${rows.length} subject${rows.length !== 1 ? 's' : ''} · minimum ${MIN_SUBJECTS} required`
+        }
         breadcrumb={
           <Breadcrumb
             crumbs={[
               { label: 'Students', to: '/students' },
               ...(student ? [{ label: student.fullName, to: `/students/${student.id}` }] : []),
-              ...(semester && student ? [{ label: semester.semesterName, to: `/students/${student.id}/semesters/${semester.id}` }] : []),
+              ...(semester && student ? [{ label: semLabel!, to: `/students/${student.id}/semesters/${semester.id}` }] : []),
               { label: 'Subjects', to: `/semesters/${semesterId}/subjects` },
               { label: isEdit ? 'Edit' : 'Add' },
             ]}

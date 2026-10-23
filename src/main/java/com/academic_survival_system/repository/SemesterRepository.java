@@ -8,13 +8,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SemesterRepository extends JpaRepository<Semester, Long> {
+public interface SemesterRepository
+        extends JpaRepository<Semester, Long> {
 
-    List<Semester> findByStudentId(Long studentId);
+    List<Semester> findByStudentIdOrderByYearLevelAscSemesterNumberAsc(
+            Long studentId
+    );
 
-    List<Semester> findByStudentIdAndAcademicYear(
+    List<Semester> findByStudentIdAndYearLevelOrderBySemesterNumberAsc(
             Long studentId,
-            String academicYear
+            Integer yearLevel
     );
 
     Optional<Semester> findByIdAndStudentId(

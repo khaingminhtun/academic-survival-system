@@ -100,15 +100,15 @@ export default function SemesterDetailPage() {
   return (
     <div className="space-y-5">
       <PageHeader
-        title={semester.semesterName}
-        subtitle={`AY ${semester.academicYear}${student ? ` · ${student.fullName}` : ''}`}
+        title={`Year ${semester.yearLevel} · Semester ${semester.semesterNumber}`}
+        subtitle={`Year Level ${semester.yearLevel}${student ? ` · ${student.fullName}` : ''}`}
         breadcrumb={
           <Breadcrumb
             crumbs={[
               { label: 'Students', to: '/students' },
               { label: student?.fullName ?? '…', to: `/students/${studentId}` },
               { label: 'Semesters', to: `/students/${studentId}/semesters` },
-              { label: semester.semesterName },
+              { label: `Year ${semester.yearLevel} · Sem ${semester.semesterNumber}` },
             ]}
           />
         }
@@ -248,7 +248,7 @@ export default function SemesterDetailPage() {
         open={!!deleteSubjectTarget}
         danger
         title="Delete Subject"
-        message={`Delete "${deleteSubjectTarget?.subjectName}"?`}
+        message={`Delete "${deleteSubjectTarget?.subjectName}"? This cannot be undone.`}
         confirmLabel="Delete"
         loading={deletingSubject}
         onConfirm={handleDeleteSubject}

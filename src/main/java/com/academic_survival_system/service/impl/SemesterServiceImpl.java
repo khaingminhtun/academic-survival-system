@@ -8,11 +8,11 @@ import com.academic_survival_system.model.Student;
 import com.academic_survival_system.repository.SemesterRepository;
 import com.academic_survival_system.repository.StudentRepository;
 import com.academic_survival_system.service.SemesterService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -37,8 +37,8 @@ public class SemesterServiceImpl implements SemesterService {
 
         Semester semester = Semester.builder()
                 .student(student)
-                .semesterName(request.semesterName())
-                .academicYear(request.academicYear())
+                .yearLevel(request.yearLevel())
+                .semesterNumber(request.semesterNumber())
                 .build();
 
         Semester savedSemester = semesterRepository.save(semester);
@@ -49,7 +49,7 @@ public class SemesterServiceImpl implements SemesterService {
     @Override
     public List<SemesterResponse> getSemesters(
             Long studentId,
-            String academicYear) {
+            Integer yearLevel) {
 
         if (!studentRepository.existsById(studentId)) {
             throw new ResourceNotFoundException(
@@ -59,14 +59,19 @@ public class SemesterServiceImpl implements SemesterService {
 
         List<Semester> semesters;
 
-        if (academicYear == null || academicYear.isBlank()) {
+        if (yearLevel == null) {
             semesters =
-                    semesterRepository.findByStudentId(studentId);
+                    semesterRepository
+                            .findByStudentIdOrderByYearLevelAscSemesterNumberAsc(
+                                    studentId
+                            );
         } else {
             semesters =
                     semesterRepository
-                            .findByStudentIdAndAcademicYear(
-                                    studentId, academicYear);
+                            .findByStudentIdAndYearLevelOrderBySemesterNumberAsc(
+                                    studentId,
+                                    yearLevel
+                            );
         }
 
         return semesters.stream()
@@ -93,8 +98,8 @@ public class SemesterServiceImpl implements SemesterService {
 
         Semester semester = findSemester(studentId, semesterId);
 
-        semester.setSemesterName(request.semesterName());
-        semester.setAcademicYear(request.academicYear());
+        semester.setYearLevel(request.yearLevel());
+        semester.setSemesterNumber(request.semesterNumber());
 
         Semester updatedSemester = semesterRepository.save(semester);
 
@@ -131,8 +136,8 @@ public class SemesterServiceImpl implements SemesterService {
         return new SemesterResponse(
                 semester.getId(),
                 semester.getStudent().getId(),
-                semester.getSemesterName(),
-                semester.getAcademicYear()
+                semester.getYearLevel(),
+                semester.getSemesterNumber()
         );
     }
 }

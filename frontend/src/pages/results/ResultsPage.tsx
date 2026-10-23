@@ -70,13 +70,13 @@ export default function ResultsPage() {
   }, [semesterId]);
 
   const pageTitle = semesterId
-    ? `Results · ${semester?.semesterName ?? 'Semester ' + semesterId}`
+    ? `Results · ${semester ? `Year ${semester.yearLevel} · Sem ${semester.semesterNumber}` : 'Semester ' + semesterId}`
     : `Results · ${student?.fullName ?? 'Student'}`;
 
   const breadcrumbs = [
     { label: 'Students', to: '/students' },
     ...(student ? [{ label: student.fullName, to: `/students/${student.id}` }] : []),
-    ...(semester && student ? [{ label: semester.semesterName, to: `/students/${student.id}/semesters/${semester.id}` }] : []),
+    ...(semester && student ? [{ label: `Year ${semester.yearLevel} · Sem ${semester.semesterNumber}`, to: `/students/${student.id}/semesters/${semester.id}` }] : []),
     { label: 'Results' },
   ];
 

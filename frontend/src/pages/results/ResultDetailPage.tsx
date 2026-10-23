@@ -75,7 +75,7 @@ export default function ResultDetailPage() {
               { label: 'Students', to: '/students' },
               ...(student ? [{ label: student.fullName, to: `/students/${student.id}` }] : []),
               ...(semester && student
-                ? [{ label: semester.semesterName, to: `/students/${student.id}/semesters/${semester.id}` }]
+                ? [{ label: `Year ${semester.yearLevel} · Sem ${semester.semesterNumber}`, to: `/students/${student.id}/semesters/${semester.id}` }]
                 : []),
               { label: 'Result #' + result.id },
             ]}
