@@ -21,7 +21,7 @@ public class SubjectController {
 
     private final SubjectService subjectService;
 
-    // Reference implementation
+
     @PostMapping
     public ResponseEntity<List<SubjectResponse>> createSubjects(
             @PathVariable Long semesterId,
@@ -35,7 +35,6 @@ public class SubjectController {
                 .body(responses);
     }
 
-    // TODO: GET /api/v1/semesters/{semesterId}/subjects
     @GetMapping
     public ResponseEntity<List<SubjectResponse>> getAllSubjects(
             @PathVariable Long semesterId
@@ -44,8 +43,8 @@ public class SubjectController {
                 subjectService.getAllSubjects(semesterId)
         );
     }
-    // TODO: GET /api/v1/semesters/{semesterId}/subjects/{subjectId}
-    // GET: Get one subject
+
+
     @GetMapping("/{subjectId}")
     public ResponseEntity<SubjectResponse> getSubject(
             @PathVariable Long semesterId,
@@ -56,8 +55,7 @@ public class SubjectController {
         );
     }
 
-    // TODO: PUT /api/v1/semesters/{semesterId}/subjects/{subjectId}
-    // PUT: Update a subject
+
     @PutMapping("/{subjectId}")
     public ResponseEntity<SubjectResponse> updateSubject(
             @PathVariable Long semesterId,
@@ -84,8 +82,7 @@ public class SubjectController {
         );
     }
 
-    // TODO: DELETE /api/v1/semesters/{semesterId}/subjects/{subjectId}
-    // DELETE: Delete a subject
+
     @DeleteMapping("/{subjectId}")
     public ResponseEntity<Void> deleteSubject(
             @PathVariable Long semesterId,
