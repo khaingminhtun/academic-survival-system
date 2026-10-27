@@ -20,7 +20,7 @@ public class AcademicResultController {
 
     private final AcademicResultService academicResultService;
 
-    // Reference implementation
+
     @PostMapping("/semesters/{semesterId}/results/calculate")
     public ResponseEntity<AcademicResultResponse> calculateResult(
             @PathVariable Long semesterId) {
@@ -31,8 +31,8 @@ public class AcademicResultController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // TODO: GET /api/v1/semesters/{semesterId}/results
-    // Get the latest result report for a semester
+
+
     @GetMapping("/semesters/{semesterId}/results")
     public ResponseEntity<AcademicResultResponse> getLatestResult(
             @PathVariable Long semesterId) {
@@ -43,8 +43,7 @@ public class AcademicResultController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: GET /api/v1/semesters/{semesterId}/results/history
-    // Get the result report history for a semester
+
     @GetMapping("/semesters/{semesterId}/results/history")
     public ResponseEntity<List<AcademicResultResponse>> getResultHistory(
             @PathVariable Long semesterId) {
@@ -55,8 +54,7 @@ public class AcademicResultController {
         return ResponseEntity.ok(responses);
     }
 
-    // TODO: GET /api/v1/results/{resultId}
-    // Get one academic result report by ID
+
     @GetMapping("/results/{resultId}")
     public ResponseEntity<AcademicResultResponse> getResultById(
             @PathVariable Long resultId) {
@@ -67,8 +65,7 @@ public class AcademicResultController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: GET /api/v1/students/{studentId}/results
-    // Get all academic result reports for a student
+
     @GetMapping("/students/{studentId}/results")
     public ResponseEntity<List<AcademicResultResponse>> getStudentResults(
             @PathVariable Long studentId) {
@@ -80,8 +77,6 @@ public class AcademicResultController {
     }
 
 
-    // TODO: GET /api/v1/results/{resultId}/risk-subjects
-    // Get at-risk subjects for a specific result report
     @GetMapping("/results/{resultId}/risk-subjects")
     public ResponseEntity<List<RiskSubjectResponse>> getRiskSubjects(
             @PathVariable Long resultId) {

@@ -20,7 +20,6 @@ public class SemesterController {
 
     private final SemesterService semesterService;
 
-    // POST /api/v1/students/{studentId}/semesters
     @PostMapping
     public ResponseEntity<SemesterResponse> createSemester(
             @PathVariable Long studentId,
@@ -47,7 +46,7 @@ public class SemesterController {
         return ResponseEntity.ok(response);
     }
 
-    // GET /api/v1/students/{studentId}/semesters/{semesterId}
+
     @GetMapping("/{semesterId}")
     public ResponseEntity<SemesterResponse> getSemesterById(
             @PathVariable Long studentId,
@@ -59,7 +58,6 @@ public class SemesterController {
         return ResponseEntity.ok(response);
     }
 
-    // PUT /api/v1/students/{studentId}/semesters/{semesterId}
     @PutMapping("/{semesterId}")
     public ResponseEntity<SemesterResponse> updateSemester(
             @PathVariable Long studentId,
@@ -73,7 +71,7 @@ public class SemesterController {
         return ResponseEntity.ok(response);
     }
 
-    // DELETE /api/v1/students/{studentId}/semesters/{semesterId}
+
     @DeleteMapping("/{semesterId}")
     public ResponseEntity<Void> deleteSemester(
             @PathVariable Long studentId,
